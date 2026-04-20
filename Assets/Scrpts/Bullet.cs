@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    float spd = 3.5f;
+    public float spd = 10f;
+    public float lifeTime = 3f;
 
-    // Start is called before the first frame update
     void Start()
     {
-        
+        Destroy(gameObject, lifeTime);
     }
 
-    // Update is called once per frame
     void Update()
     {
-        transform.Translate(Vector3.up * spd * Time.deltaTime);
+        // 화면 위쪽(Y+)으로 발사
+        transform.Translate(Vector3.up * spd * Time.deltaTime, Space.World);
     }
 }

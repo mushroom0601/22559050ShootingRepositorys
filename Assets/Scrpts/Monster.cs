@@ -1,46 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Monster : MonoBehaviour
 {
-
-    public float spd = 1.0f;
-    public GameObject target;
-    Vector3 direct = Vector3.down;
+    public float spd = 2.5f;
     public GameObject prefabsExplosion;
-
-    private void Start()
-    {
-        
-    }
 
     private void Update()
     {
-        transform.position = transform.position + direct * spd * Time.deltaTime;
+        transform.position += Vector3.down * spd * Time.deltaTime;
     }
 
-    /*OnCollisionEnter : 두 오브젝트가 닿았을 때, 딱 1번.
-     * (Collision.collision): Collsion 상대방 객체 Collider
-     */
-
-  private void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Bullet")
+        if (!collision.gameObject.CompareTag("Bullet"))
+            return;
+
+        ScoreManager scoreManager = FindObjectOfType<ScoreManager>();
+
+        if (scoreManager != null)
         {
-            GameObject gameManager = GameObject.Find("GameManager");
-            ScoreManager scoreManager = gameManager.GetComponent<ScoreManager>();
-            scoreManager.nowScore++;
-            scoreManager.nowScoreUI.text = "Now Score : " + scoreManager.nowScore;
+            scoreManager.AddScore(1);
+            scoreManager.AddNormalKill();
+        }
 
-            if(scoreManager.nowScore > scoreManager.bestScore)
-            {
-                scoreManager.bestScore = scoreManager.nowScore;
-                scoreManager.bestScoreUI.text = "Best Score : " + scoreManager.bestScore;
-
-                PlayerPrefs.SetInt("BestScore", scoreManager.bestScore);
-            }
-
+        if (prefabsExplosion != null)
+        {
             GameObject explosionObj = Instantiate(prefabsExplosion);
             explosionObj.transform.position = transform.position;
         }

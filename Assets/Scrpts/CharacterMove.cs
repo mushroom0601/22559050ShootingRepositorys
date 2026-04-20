@@ -6,23 +6,14 @@ public class CharacterMove : MonoBehaviour
 {
     public float spd = 5f;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-       
-    }
-
-    // Update is called once per frame
     void Update()
     {
         float h = Input.GetAxis("Horizontal");
-
         float v = Input.GetAxis("Vertical");
 
-        //Vector3.direct = Vector3.right * h + Vector3.up * v;
-        Vector3 direct = new Vector3(h, v, 0);
+        // 이 게임은 X, Y 평면에서 움직이는 구조
+        Vector3 direct = new Vector3(h, v, 0f);
 
-        //transform.Translate(direct * spd * Time.deltaTime);
-        transform.position = transform.position + direct * spd * Time.deltaTime;
+        transform.position += direct * spd * Time.deltaTime;
     }
 }
